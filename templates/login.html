@@ -21,7 +21,8 @@
             </div>
             <div class="bg-black bg-opacity-70 p-10 mb-5">
                 <!-- Your login form goes here -->
-                <form action="#" method="POST">
+                <form action="{{ url_for('login') }}" method="POST">
+
                     <label for="username" class="text-white">Username:</label>
                     <input type="text" id="username" name="username" class="input w-full bg-black border-b bg-opacity-0 text-white px-0 py-4 mb-4 tm-border-gold" required>
                     
