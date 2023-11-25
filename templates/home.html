@@ -11,16 +11,14 @@
       href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600&family=Oswald:wght@600&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="css/tailwind.css" />
-    <link rel="stylesheet" href="css/tooplate-antique-cafe.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/tailwind.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/tooplate-antique-cafe.css') }}" />
+
   </head>
   <body>
-    <div
-      id="intro"
-      class="parallax-window"
-      data-parallax="scroll"
-      data-image-src="img/antique-cafe-bg-01.jpg"
-    >
+    <div id="intro" class="parallax-window" data-parallax="scroll" 
+    data-image-src="{{ url_for('static', filename='images/antique-cafe-bg-01.jpg') }}">
+
       <nav id="tm-nav" class="fixed w-full">
         <div class="tm-container mx-auto px-2 md:py-6 text-right">
           <button class="md:hidden py-2 px-2" id="menu-toggle">
@@ -30,9 +28,6 @@
             class="mb-3 md:mb-0 text-2xl font-normal flex justify-end flex-col md:flex-row"
           >
             <li class="inline-block mb-4 mx-4">
-              <a href="#intro" class="tm-text-gold py-1 md:py-3 px-4">Intro</a>
-            </li>
-            <li class="inline-block mb-4 mx-4">
               <a href="#menu" class="tm-text-gold py-1 md:py-3 px-4">Menu</a>
             </li>
             <li class="inline-block mb-4 mx-4">
@@ -40,7 +35,17 @@
             </li>
             <li class="inline-block mb-4 mx-4">
               <a href="#contact" class="tm-text-gold py-1 md:py-3 px-4"
-                >Contact</a
+                >My Orders</a
+              >
+            </li>
+            <li class="inline-block mb-4 mx-4">
+              <a href="{{url_for('login')}}" class="tm-text-gold py-1 md:py-3 px-4"
+                >Login</a
+              >
+            </li>
+            <li class="inline-block mb-4 mx-4">
+              <a href="{{url_for('register')}}" class="tm-text-gold py-1 md:py-3 px-4"
+                >Sign Up</a
               >
             </li>
           </ul>
@@ -83,7 +88,7 @@
       id="menu"
       class="parallax-window"
       data-parallax="scroll"
-      data-image-src="img/antique-cafe-bg-02.jpg"
+      data-image-src="{{ url_for('static', filename='images/antique-cafe-bg-02.jpg') }}"
     >
       <div class="container mx-auto tm-container py-24 sm:py-48">
         <div class="text-center mb-16">
@@ -98,7 +103,8 @@
             class="flex-1 m-5 rounded-xl px-4 py-6 sm:px-8 sm:py-10 tm-bg-brown tm-item-container"
           >
             <div class="flex items-start mb-6 tm-menu-item">
-              <img src="img/menu-item-1.jpg" alt="Image" class="rounded-md" />
+              <img src="{{ url_for('static', filename='images/menu-item-1.jpg') }}" alt="Image" class="rounded-md" />
+
               <div class="ml-3 sm:ml-6">
                 <h3 class="text-lg sm:text-xl mb-2 sm:mb-3 tm-text-yellow">
                   Hot Cappuccino
@@ -112,7 +118,7 @@
               </div>
             </div>
             <div class="flex items-start mb-6 tm-menu-item">
-              <img src="img/menu-item-2.jpg" alt="Image" class="rounded-md" />
+                <img src="{{ url_for('static', filename='images/menu-item-2.jpg') }}" alt="Image" class="rounded-md" />
               <div class="ml-3 sm:ml-6">
                 <h3 class="text-lg sm:text-xl mb-2 sm:mb-3 tm-text-yellow">
                   Hot Americano
@@ -126,7 +132,7 @@
               </div>
             </div>
             <div class="flex items-start mb-6 tm-menu-item">
-              <img src="img/menu-item-3.jpg" alt="Image" class="rounded-md" />
+                <img src="{{ url_for('static', filename='images/menu-item-3.jpg') }}" alt="Image" class="rounded-md" />
               <div class="ml-3 sm:ml-6">
                 <h3 class="text-lg sm:text-xl mb-2 sm:mb-3 tm-text-yellow">
                   Hot Latte #FC6
@@ -140,7 +146,7 @@
               </div>
             </div>
             <div class="flex items-start mb-6 tm-menu-item">
-              <img src="img/menu-item-4.jpg" alt="Image" class="rounded-md" />
+                <img src="{{ url_for('static', filename='images/menu-item-4.jpg') }}" alt="Image" class="rounded-md" />
               <div class="ml-3 sm:ml-6">
                 <h3 class="text-lg sm:text-xl tm-text-yellow mb-1">
                   Hot Espresso
@@ -169,7 +175,7 @@
                   Large $15
                 </div>
               </div>
-              <img src="img/menu-item-5.jpg" alt="Image" class="rounded-md" />
+                <img src="{{ url_for('static', filename='images/menu-item-5.jpg') }}" alt="Image" class="rounded-md" />
             </div>
             <div class="flex items-start justify-end mb-6 tm-menu-item-2">
               <div class="text-right mr-6">
@@ -183,7 +189,7 @@
                   Large $16.50
                 </div>
               </div>
-              <img src="img/menu-item-6.jpg" alt="Image" class="rounded-md" />
+                <img src="{{ url_for('static', filename='images/menu-item-6.jpg') }}" alt="Image" class="rounded-md" />
             </div>
             <div class="flex items-start justify-end mb-6 tm-menu-item-2">
               <div class="text-right mr-6">
@@ -197,7 +203,7 @@
                   Large $18
                 </div>
               </div>
-              <img src="img/menu-item-7.jpg" alt="Image" class="rounded-md" />
+                <img src="{{ url_for('static', filename='images/menu-item-7.jpg') }}" alt="Image" class="rounded-md" />
             </div>
             <div class="flex items-start justify-end mb-6 tm-menu-item-2">
               <div class="text-right mr-6">
@@ -211,7 +217,7 @@
                   Small $10 . Large $15
                 </div>
               </div>
-              <img src="img/menu-item-8.jpg" alt="Image" class="rounded-md" />
+                <img src="{{ url_for('static', filename='images/menu-item-8.jpg') }}" alt="Image" class="rounded-md" />
             </div>
           </div>
         </div>
@@ -221,7 +227,7 @@
       id="about"
       class="parallax-window"
       data-parallax="scroll"
-      data-image-src="img/antique-cafe-bg-03.jpg"
+      data-image-src="{{ url_for('static', filename='images/antique-cafe-bg-03.jpg') }}"
     >
       <div class="container mx-auto tm-container py-24 sm:py-48">
         <div class="tm-item-container sm:ml-auto sm:mr-12 mx-auto sm:px-0 px-4">
@@ -258,7 +264,7 @@
       id="contact"
       class="parallax-window relative"
       data-parallax="scroll"
-      data-image-src="img/antique-cafe-bg-04.jpg"
+      data-image-src="{{ url_for('static', filename='images/antique-cafe-bg-04.jpg') }}"
     >
       <div class="container mx-auto tm-container pt-24 pb-48 sm:py-48">
         <div
