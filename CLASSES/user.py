@@ -2,26 +2,20 @@ from flask import jsonify
 from google.cloud import firestore
 
 class User:
-    def __init__(self, id, name, email):
+    def __init__(self, id, email, roles=None):
         self.id = id
-        self.name = name
         self.email = email
+        self.roles = roles if roles else []
 
     def to_dict(self):
         return {
             'id': self.id,
-            'name': self.name,
-            'email': self.email
+            'email': self.email,
+            'roles': self.roles
         }
 
-    def save(self):
-        db = firestore.Client()
-        user_ref = db.collection('users').document(self.id)
-        user_ref.set(self.to_dict())
-
-    @staticmethod
-    def get_all():
-        db = firestore.Client()
-        users_ref = db.collection('users')
-        users = [doc.to_dict() for doc in users_ref.stream()]
-        return jsonify(users)
+    def is_admin(self):
+        return 'admin' in self.roles
+if __name__ == '__main__':
+    user = User('123', 'th@g', ['admin'])
+    print(user.to_dict())
