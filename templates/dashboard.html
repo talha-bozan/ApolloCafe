@@ -9,44 +9,36 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/tooplate-antique-cafe.css') }}" />
 </head>
 <body>
-  <nav id="tm-nav" class="fixed w-full">
-    <div class="tm-container mx-auto px-2 md:py-6 text-right">
-      <!-- Navigation items go here -->
-    </div>
-  </nav>
 
-  <div id="intro" class="parallax-window" data-parallax="scroll" data-image-src="{{ url_for('static', filename='images/antique-cafe-bg-01.jpg') }}">
-    <div class="container mx-auto px-2 tm-intro-width">
-      <!-- Intro content goes here -->
+  <div class="container">
+    <!-- Product Section -->
+    <div class="product">
+      <h2>Product Information</h2>
+      <p>Name: <span id="productName">Product Name</span></p>
+      <p>Price: $<span id="productPrice">0.00</span></p>
+      <p>ID: <span id="productID">12345</span></p>
+      <button id="orderButton">Order Now</button>
+    </div>
+
+    <!-- Small Panel for User Input -->
+    <div class="user-input-panel">
+      <h2>User Input</h2>
+      <form id="userInputForm" method="post">
+
+        <label for="inputName">Name:</label>
+        <input type="text" id="inputName" name="inputName" required>
+
+        <label for="inputPrice">Price:</label>
+          <input type="number" id="inputPrice" name="inputPrice" step="0.01" required>
+
+        <label for="inputID">ID:</label>
+        <input type="text" id="inputID" name="inputID" required>
+
+        <button type="submit" id="submitButton">Submit</button>
+      </form>
     </div>
   </div>
 
-  <div id="menu" class="parallax-window" data-parallax="scroll" data-image-src="{{ url_for('static', filename='images/antique-cafe-bg-02.jpg') }}">
-    <div class="container mx-auto tm-container py-24 sm:py-48">
-      <!-- Menu content goes here -->
-    </div>
-  </div>
 
-  <div id="about" class="parallax-window" data-parallax="scroll" data-image-src="{{ url_for('static', filename='images/antique-cafe-bg-03.jpg') }}">
-    <div class="container mx-auto tm-container py-24 sm:py-48">
-      <!-- About content goes here -->
-    </div>
-  </div>
-
-  <div id="contact" class="parallax-window relative" data-parallax="scroll" data-image-src="{{ url_for('static', filename='images/antique-cafe-bg-04.jpg') }}">
-    <div class="container mx-auto tm-container pt-24 pb-48 sm:py-48">
-      <!-- Contact content goes here -->
-    </div>
-  </div>
-
-  <script>
-    function checkAndShowHideMenu() {
-      if (window.innerWidth < 768) {
-        $("#tm-nav ul").addClass("hidden");
-      } else {
-        $("#tm-nav ul").removeClass("hidden");
-      }
-    }
-  </script>
 </body>
 </html>

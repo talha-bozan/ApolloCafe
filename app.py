@@ -48,6 +48,25 @@ def login():
             return "Invalid email or password"
     return render_template('login.html')
 
+@app.route('/dashboard', methods=['GET', 'POST'])
+def dashboard():
+    print("Method:", request.method)
+    print("Form Data:", request.form)
+
+    if request.method == 'POST':
+        product_name = request.form['inputName']
+        product_price = request.form['inputPrice']
+        product_id = request.form['inputID']
+        product_data = {
+            'name': product_name,
+            'price': product_price,
+            'productID': product_id,
+        }
+        db.collection('products').add(product_data)
+        return "success"
+
+    return render_template('dashboard.html')
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -81,10 +100,6 @@ def register():
             return f"Registration failed: {e}"
 
     return render_template('register.html')
-
-@app.route('/dashboard')
-def dashboard():
-    return render_template('dashboard.html')
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=5050, debug=True)
