@@ -3,6 +3,8 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 import firebase_admin
 from firebase_admin import credentials, auth, firestore
 from pyrebase import pyrebase
+from flask import jsonify
+
 
 # Initialize Firebase Admin SDK
 cred = credentials.Certificate("KEYS\\user-api.json")
@@ -55,17 +57,21 @@ def dashboard():
 
     if request.method == 'POST':
         product_name = request.form['inputName']
-        product_price = request.form['inputPrice']
         product_id = request.form['inputID']
+        large_price = request.form['largePrice']
+        small_price = request.form['smallPrice']
         product_data = {
             'name': product_name,
-            'price': product_price,
             'productID': product_id,
+            'smallPrice': small_price,
+            'largePrice': large_price
         }
         db.collection('products').add(product_data)
-        return "success"
+        return redirect(url_for('dashboard')) 
 
-    return render_template('dashboard.html')
+    products = db.collection('products').order_by('productID', direction=firestore.Query.ASCENDING).stream()
+    product_list = [prod.to_dict() for prod in products]
+    return render_template('dashboard.html', products=product_list)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -74,6 +80,7 @@ def register():
         email = request.form['email']
         password = request.form['password']
         confirm_password = request.form['confirm_password']
+        role = request.form['role']  # Get the selected role from the form
 
         if password != confirm_password:
             return "Password and Confirm Password do not match"
@@ -90,9 +97,11 @@ def register():
                 'uid': user.uid,
                 'username': username,
                 'email': email,
-                'password': password
+                'password': password,
+                'role': role  # Save the selected role to the database
                 # Add more user data fields as needed
             }
+            
             db.collection('users').add(user_data)
 
             return "Registration successful"  # You can redirect to another page if registration is successful
@@ -100,6 +109,7 @@ def register():
             return f"Registration failed: {e}"
 
     return render_template('register.html')
+
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=5050, debug=True)
