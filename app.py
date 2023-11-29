@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 import firebase_admin
 from firebase_admin import credentials, auth, firestore
 from pyrebase import pyrebase
@@ -27,6 +27,7 @@ firebase = pyrebase.initialize_app(firebase_config)
 auth1 = firebase.auth()
 
 app = Flask(__name__)
+app.secret_key = os.urandom(24)
 db = firestore.client()
 
 @app.route('/')
@@ -39,21 +40,32 @@ def login():
         email = request.form['email']
         password = request.form['password']
         
-        user = auth.get_user_by_email(email)
-        #check email and password from firestore
+        UserListFireStore = db.collection('users').where(field_path='email', op_string='==', value=email).stream()
+        user_role = [user_datas.to_dict() for user_datas in UserListFireStore][0]['role']
+        
         try:            
             user = auth.get_user_by_email(email)
             if user:
                 auth1.sign_in_with_email_and_password(email, password)
+                print("Successfully signed in")
+                session['user_role'] = user_role
+                print(session['user_role'])
                 return redirect(url_for('dashboard'))
-        except:
-            return "Invalid email or password"
+        except Exception as e:
+            return f"Login failed: {e}"
     return render_template('login.html')
+
 
 @app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
     print("Method:", request.method)
     print("Form Data:", request.form)
+
+    if 'user_role' in session:
+        if session['user_role'] != 'ADMIN':
+            return redirect(url_for('index'))
+    else:
+        return redirect(url_for('login'))
 
     if request.method == 'POST':
         product_name = request.form['inputName']
