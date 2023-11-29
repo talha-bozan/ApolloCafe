@@ -32,7 +32,13 @@ db = firestore.client()
 
 @app.route('/')
 def index():
-    return render_template('home.html')
+    products = db.collection('products').order_by('productID', direction=firestore.Query.ASCENDING).stream()
+    product_list = [prod.to_dict() for prod in products]
+    #split list into two
+    product_list1 = product_list[:len(product_list)//2]
+    product_list2 = product_list[len(product_list)//2:]
+
+    return render_template('home.html', products1=product_list1, products2=product_list2)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -104,14 +110,12 @@ def register():
                 password=password,
                 display_name=username
             )
-            # Save additional user information to Firestore database
             user_data = {
                 'uid': user.uid,
                 'username': username,
                 'email': email,
                 'password': password,
-                'role': role  # Save the selected role to the database
-                # Add more user data fields as needed
+                'role': role  
             }
             
             db.collection('users').add(user_data)

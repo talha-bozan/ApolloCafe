@@ -1,0 +1,30 @@
+{% for product in products2 %}
+<div class="flex items-start justify-end mb-6 tm-menu-item-2">
+
+    <div class="text-right mr-6">
+      <h3 class="text-lg sm:text-xl mb-2 sm:mb-3 tm-text-yellow">
+        {{ product.name }}
+      </h3>
+
+      <div class="text-white text-md sm:text-lg font-light mb-1">
+        {{ product.smallPrice }}
+      </div>
+
+      <div class="text-white text-md sm:text-lg font-light">
+        {{ product.largePrice }}
+      </div>
+
+    </div>
+    <img src="{{ url_for('static', filename='images/menu-item-' + product.productID + '.jpg') }}" alt="Image" class="rounded-md" />
+    </div>
+  {% endfor %}
+
+  {% for product in products %}
+  <tr>
+      <td>{{ product.name }}</td>
+      <td>{{ product.productID }}</td>
+      <td>{{ product.smallPrice }}</td>
+      <td>{{ product.largePrice }}</td>
+      <!-- More fields as necessary -->
+  </tr>
+  
