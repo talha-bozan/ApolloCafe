@@ -63,15 +63,17 @@ def login():
             return f"Login failed: {e}"
     return render_template('login.html')
 
+# Flask route to handle placing orders
 @app.route('/give_order', methods=['GET', 'POST'])
 def give_order():
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
+    user_id = session['user_id']
+
     if request.method == 'POST':
         product_id = request.form['product']
         quantity = request.form['quantity']
-        user_id = session['user_id']
         order_data = {
             'productID': product_id,
             'quantity': quantity,
@@ -79,12 +81,28 @@ def give_order():
         }
         db.collection('current_orders').add(order_data)
         return redirect(url_for('give_order')) 
-        
-    # Load products to display in the form
+
     products = db.collection('products').order_by('productID', direction=firestore.Query.ASCENDING).stream()
     product_list = [prod.to_dict() for prod in products]
-    
-    return render_template('give_order.html', products=product_list)
+    current_orders = db.collection('current_orders').where('userID', '==', user_id).stream()
+    orders_list = [order.to_dict() for order in current_orders]
+
+    return render_template('give_order.html', products=product_list, orders=orders_list)
+
+# Flask route to confirm all orders
+@app.route('/confirm_orders', methods=['POST'])
+def confirm_orders():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    user_id = session['user_id']
+
+    # Implement your logic for confirming orders here
+    # Example: Moving current orders to a 'confirmed_orders' collection
+    # ...
+
+    return redirect(url_for('card'))  # Redirecting to 'card.html' after confirming orders
+
 
 
 @app.route('/dashboard', methods=['GET', 'POST'])

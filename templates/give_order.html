@@ -11,16 +11,24 @@
         <form action="/give_order" method="post">
             <label for="product">Product:</label>
             <select name="product" id="product">
-                <!-- Dynamically load products here -->
                 {% for product in products %}
                     <option value="{{ product['productID'] }}">{{ product['name'] }}</option>
                 {% endfor %}
             </select><br><br>
-
             <label for="quantity">Quantity:</label>
             <input type="number" id="quantity" name="quantity" min="1" required><br><br>
-
             <input type="submit" value="Place Order">
+        </form>
+
+        <h2>Your Current Orders</h2>
+        <ul>
+            {% for order in orders %}
+                <li>Product ID: {{ order['productID'] }}, Quantity: {{ order['quantity'] }}</li>
+            {% endfor %}
+        </ul>
+
+        <form action="/confirm_orders" method="post">
+            <input type="submit" value="Confirm All Orders">
         </form>
     {% else %}
         <p>You need to be logged in to place an order.</p>
