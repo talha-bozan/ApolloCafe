@@ -72,12 +72,14 @@ def give_order():
         product_id = request.form['product']
         quantity = request.form['quantity']
         user_id = session['user_id']
-
-        # Logic to process the order...
-        # This can involve storing the order in the database, calculating prices, etc.
-
-        return "Order placed successfully!"
-
+        order_data = {
+            'productID': product_id,
+            'quantity': quantity,
+            'userID': user_id
+        }
+        db.collection('current_orders').add(order_data)
+        return redirect(url_for('give_order')) 
+        
     # Load products to display in the form
     products = db.collection('products').order_by('productID', direction=firestore.Query.ASCENDING).stream()
     product_list = [prod.to_dict() for prod in products]
