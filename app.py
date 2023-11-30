@@ -46,9 +46,14 @@ def login():
         email = request.form['email']
         password = request.form['password']
         
-        UserListFireStore = db.collection('users').where(field_path='email', op_string='==', value=email).stream()
-        user_role = [user_datas.to_dict() for user_datas in UserListFireStore][0]['role']
-        
+        user_data_firebase = db.collection('users').where(field_path='email', op_string='==', value=email).stream()
+        user_data_list = [user_data.to_dict() for user_data in user_data_firebase]
+        if not user_data_list:
+            return "User not found"
+
+        user_role = user_data_list[0]['role']
+
+
         try:            
             user = auth.get_user_by_email(email)
             if user:
