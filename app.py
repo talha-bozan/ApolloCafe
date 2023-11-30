@@ -45,26 +45,44 @@ def login():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
-        
         user_data_firebase = db.collection('users').where(field_path='email', op_string='==', value=email).stream()
         user_data_list = [user_data.to_dict() for user_data in user_data_firebase]
         if not user_data_list:
             return "User not found"
-
         user_role = user_data_list[0]['role']
-
-
         try:            
             user = auth.get_user_by_email(email)
             if user:
                 auth1.sign_in_with_email_and_password(email, password)
                 print("Successfully signed in")
                 session['user_role'] = user_role
+                session['user_id'] = user.uid
                 print(session['user_role'])
                 return redirect(url_for('dashboard'))
         except Exception as e:
             return f"Login failed: {e}"
     return render_template('login.html')
+
+@app.route('/give_order', methods=['GET', 'POST'])
+def give_order():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    if request.method == 'POST':
+        product_id = request.form['product']
+        quantity = request.form['quantity']
+        user_id = session['user_id']
+
+        # Logic to process the order...
+        # This can involve storing the order in the database, calculating prices, etc.
+
+        return "Order placed successfully!"
+
+    # Load products to display in the form
+    products = db.collection('products').order_by('productID', direction=firestore.Query.ASCENDING).stream()
+    product_list = [prod.to_dict() for prod in products]
+    
+    return render_template('give_order.html', products=product_list)
 
 
 @app.route('/dashboard', methods=['GET', 'POST'])
