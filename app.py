@@ -95,13 +95,11 @@ def confirm_orders():
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
-    user_id = session['user_id']
-
     # Implement your logic for confirming orders here
     # Example: Moving current orders to a 'confirmed_orders' collection
     # ...
 
-    return redirect(url_for('card'))  # Redirecting to 'card.html' after confirming orders
+    return redirect(url_for('card'))  # Redirecting to the 'card' route after confirming orders
 
 
 
@@ -169,6 +167,8 @@ def register():
 
     return render_template('register.html')
 
-
+@app.route('/card')
+def card():
+    return render_template('card.html')
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=5050, debug=True)
