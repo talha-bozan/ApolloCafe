@@ -63,31 +63,34 @@ def login():
             return f"Login failed: {e}"
     return render_template('login.html')
 
-# Flask route to handle placing orders
 @app.route('/give_order', methods=['GET', 'POST'])
 def give_order():
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
     user_id = session['user_id']
-
     if request.method == 'POST':
-        product_id = request.form['product']
+        coffee_type = request.form['coffee_type']
         quantity = request.form['quantity']
+        delivery_time = request.form['delivery_time']  # Example: "now", "in 35 minutes", etc.
+
         order_data = {
-            'productID': product_id,
+            'userID': user_id,
+            'coffee_type': coffee_type,
             'quantity': quantity,
-            'userID': user_id
+            'delivery_time': delivery_time
         }
-        db.collection('current_orders').add(order_data)
-        return redirect(url_for('give_order')) 
+        
+        # Add the order to the Firestore database and get the document reference
+        doc_ref = db.collection('orders').add(order_data)
+        order_id = doc_ref[1].id  # Get the ID of the newly created document
 
-    products = db.collection('products').order_by('productID', direction=firestore.Query.ASCENDING).stream()
+        return redirect(url_for('confirm_order', order_id=order_id))
+
+    products = db.collection('products').stream()
     product_list = [prod.to_dict() for prod in products]
-    current_orders = db.collection('current_orders').where('userID', '==', user_id).stream()
-    orders_list = [order.to_dict() for order in current_orders]
+    return render_template('give_order.html', products=product_list)
 
-    return render_template('give_order.html', products=product_list, orders=orders_list)
 
 # Flask route to confirm all orders
 @app.route('/confirm_orders', methods=['POST'])
@@ -101,7 +104,16 @@ def confirm_orders():
 
     return redirect(url_for('card'))  # Redirecting to the 'card' route after confirming orders
 
+@app.route('/confirm_order/<order_id>')
+def confirm_order(order_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
 
+    order = db.collection('orders').document(order_id).get()
+    if order.exists:
+        return render_template('confirm_order.html', order=order.to_dict())
+    else:
+        return "Order not found", 404
 
 @app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
@@ -166,6 +178,11 @@ def register():
             return f"Registration failed: {e}"
 
     return render_template('register.html')
+
+@app.route('/thank_you')
+def thank_you():
+    return render_template('thank_you.html')
+
 
 @app.route('/card')
 def card():

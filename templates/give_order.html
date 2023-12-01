@@ -8,17 +8,23 @@
 <body>
     <h1>Place Your Order</h1>
     {% if 'user_id' in session %}
-        <form action="/give_order" method="post">
-            <label for="product">Product:</label>
-            <select name="product" id="product">
-                {% for product in products %}
-                    <option value="{{ product['productID'] }}">{{ product['name'] }}</option>
-                {% endfor %}
-            </select><br><br>
-            <label for="quantity">Quantity:</label>
-            <input type="number" id="quantity" name="quantity" min="1" required><br><br>
-            <input type="submit" value="Place Order">
-        </form>
+    <form action="/give_order" method="post">
+        <label for="coffee_type">Coffee Type:</label>
+        <select name="coffee_type" id="coffee_type">
+            {% for product in products %}
+                <option value="{{ product['productID'] }}">{{ product['name'] }}</option>
+            {% endfor %}
+        </select><br><br>
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" name="quantity" min="1" required><br><br>
+        <label for="delivery_time">Delivery Time:</label>
+        <select name="delivery_time" id="delivery_time">
+            <option value="now">Now</option>
+            <option value="35_minutes">In 35 minutes</option>
+            <option value="tomorrow">Tomorrow</option>
+        </select><br><br>
+        <input type="submit" value="Place Order">
+    </form>
 
         <h2>Your Current Orders</h2>
         <ul>
@@ -33,5 +39,8 @@
     {% else %}
         <p>You need to be logged in to place an order.</p>
     {% endif %}
+
+   
+    
 </body>
 </html>
