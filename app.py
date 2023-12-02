@@ -4,6 +4,10 @@ import firebase_admin
 from firebase_admin import credentials, auth, firestore
 from pyrebase import pyrebase
 from flask import jsonify
+import json
+import datetime
+import time
+
 
 
 # Initialize Firebase Admin SDK
@@ -73,13 +77,16 @@ def give_order():
         coffee_type = request.form['coffee_type']
         quantity = request.form['quantity']
         delivery_time = request.form['delivery_time']  # Example: "now", "in 35 minutes", etc.
-        
+        #add date and time
+        now = datetime.datetime.now()
+        date_time = now.strftime("%d/%m/%Y %H:%M:%S")
 
         order_data = {
             'userID': user_id,
             'coffee_type': coffee_type,
             'quantity': quantity,
             'delivery_time': delivery_time,
+            'date_time': date_time
         }
         
         # Add the order to the Firestore database and get the document reference
@@ -118,8 +125,9 @@ def confirm_order(order_id):
         return redirect(url_for('login'))
 
     order = db.collection('orders').document(order_id).get()
+    session['order_id'] = order_id
     if order.exists:
-        return render_template('confirm_order.html', order=order.to_dict())
+        return render_template('confirm_order.html', order=order.to_dict(), orderID = order_id)
     else:
         return "Order not found", 404
 
@@ -147,10 +155,15 @@ def dashboard():
         }
         db.collection('products').add(product_data)
         return redirect(url_for('dashboard')) 
+    #change below to sort by date and time
+    last_ten_orders = db.collection('orders').order_by('date_time', direction=firestore.Query.DESCENDING).stream()
+    current_orders_list = [order.to_dict() for order in last_ten_orders]
+    #sort the current list by date_time
+    current_orders_list.sort(key=lambda x: time.mktime(time.strptime(x['date_time'], "%d/%m/%Y %H:%M:%S")), reverse=True)
 
     products = db.collection('products').order_by('productID', direction=firestore.Query.ASCENDING).stream()
     product_list = [prod.to_dict() for prod in products]
-    return render_template('dashboard.html', products=product_list)
+    return render_template('dashboard.html', products=product_list, currentOrderList = current_orders_list )
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -189,7 +202,21 @@ def register():
 
 @app.route('/thank_you')
 def thank_you():
-    return render_template('thank_you.html')
+    #fetch user email, uid, username from firebase
+    user = auth.get_user(session['user_id'])
+    user_email = user.email
+    user_name = user.display_name
+    user_id = user.uid
+
+    user_data = {
+        'uid': user_id,
+        'username': user_name,
+        'email': user_email,
+    }
+
+    user_data_firebase = db.collection('users').where(field_path='email', op_string='==', value=user_email).stream()
+    user_data_list = [user_data.to_dict() for user_data in user_data_firebase]
+    return render_template('thank_you.html', user_data=user_data)
 
 
 @app.route('/card')

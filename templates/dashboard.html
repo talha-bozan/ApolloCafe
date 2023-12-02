@@ -69,6 +69,33 @@
         </tbody>
     </table>
 </div>
+
+<div class="product-list mt-8">
+    <h2 class="text-2xl mb-3">Latest Ten Order List</h2>
+    <table class="w-full">
+        <thead>
+            <tr>
+                <th>Product Name</th>
+                <th>Product ID</th>
+                <th>Small Price</th>
+                <th>Large Price</th>
+                <!-- More headers as necessary -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in currentOrderList %}
+            <tr>
+                <td>{{ order.coffee_type }}</td>
+                <td>{{ order.delivery_time }}</td>
+                <td>{{ order.quantity }}</td>
+                <td>{{ order.userID }}</td>
+                <td>{{ order.date_time }}</td>
+                <!-- More fields as necessary -->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
     </div>
 
 </body>
