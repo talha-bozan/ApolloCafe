@@ -73,23 +73,31 @@ def give_order():
         coffee_type = request.form['coffee_type']
         quantity = request.form['quantity']
         delivery_time = request.form['delivery_time']  # Example: "now", "in 35 minutes", etc.
+        
 
         order_data = {
             'userID': user_id,
             'coffee_type': coffee_type,
             'quantity': quantity,
-            'delivery_time': delivery_time
+            'delivery_time': delivery_time,
         }
         
         # Add the order to the Firestore database and get the document reference
         doc_ref = db.collection('orders').add(order_data)
-        order_id = doc_ref[1].id  # Get the ID of the newly created document
+        order_id = doc_ref[1].id
 
+        order_data['orderID'] = order_id
+
+        # Get the ID of the newly created document
+        print(order_id)
+        
         return redirect(url_for('confirm_order', order_id=order_id))
 
     products = db.collection('products').stream()
     product_list = [prod.to_dict() for prod in products]
-    return render_template('give_order.html', products=product_list)
+    current_orders = db.collection('orders').where('userID', '==', user_id).stream()
+    orders_list = [order.to_dict() for order in current_orders]
+    return render_template('give_order.html', products=product_list , order_list = orders_list)
 
 
 # Flask route to confirm all orders

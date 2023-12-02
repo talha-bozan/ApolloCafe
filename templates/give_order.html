@@ -28,8 +28,8 @@
 
         <h2>Your Current Orders</h2>
         <ul>
-            {% for order in orders %}
-                <li>Product ID: {{ order['productID'] }}, Quantity: {{ order['quantity'] }}</li>
+            {% for order in order_list %}
+                <li>Product ID: {{ order.productID }}, Quantity: {{ order.quantity }}, Delivery Time : {{order.delivery_time}}</li>
             {% endfor %}
         </ul>
 
