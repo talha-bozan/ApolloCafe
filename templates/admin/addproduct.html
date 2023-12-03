@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<head>
+    <!-- Mobile Specific Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Favicon-->
+    <link rel="shortcut icon" href="../img/fav.png">
+    <!-- Author Meta -->
+
+    <!-- meta character set -->
+    <meta charset="UTF-8">
+    <!-- Site Title -->
+    <title> Apollo Coffee</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,400,300,500,600,700" rel="stylesheet"> 
+        <!--
+        CSS
+        ============================================= -->
+        <link rel="stylesheet" href="../css/font-awesome.min.css">
+        <link rel="stylesheet" href="../css/bootstrap.css">
+        <link rel="stylesheet" href="../css/main.css">
+    </head>
+    <body>
+
+          <header id="header" id="home">		  	
+            <div class="container">
+                <div class="row align-items-center justify-content-between d-flex">
+                  <div id="logo">
+                    <a href="index.html"><img src="../img/logo.png" alt="" title="" /></a>
+                  </div>
+                  <nav id="nav-menu-container">
+                    <ul class="nav-menu">
+                        <li class="menu-active"><a href="adminindex.html">Home</a></li>
+                        <li><a href="addproduct.html">Add Product</a></li>
+                        <li><a href="userorders.html">User Orders</a></li>
+                    </ul>
+                  </nav><!-- #nav-menu-container -->		    		
+                </div>
+            </div>
+          </header><!-- #header --> 		
+                </div>
+            </div>
+          </header><!-- #header -->
+
+
+        <!-- start banner Area -->
+        <section class="banner-area" id="home">    
+            <div class="container">
+                <div class="row fullscreen d-flex align-items-center justify-content-start">
+                    <div class="banner-content col-lg-7">
+                        <br><br><br><br><br><br><br><br><br>
+                        <h2 class="text-2xl mb-3">Add New Product</h2>
+                        <form id="userInputForm" method="post">
+                            <div>
+                                <label for="inputName">Product Name:</label>
+                                <input type="text" id="inputName" name="inputName" required>
+                            </div>
+                            <div>
+                                <label for="inputID">Product ID:</label>
+                                <input type="text" id="inputID" name="inputID" required>
+                            </div>
+                            <div>
+                                <label for="smallPrice">Small Price:</label>
+                                <input type="number" id="smallPrice" name="smallPrice" step="0.01" required>
+                            </div>
+                            <div>
+                                <label for="largePrice">Large Price:</label>
+                                <input type="number" id="largePrice" name="largePrice" step="0.01" required>
+                            </div>
+                            <!-- More fields as necessary -->
+                            <button type="submit" class="tm-bg-green text-white px-4 py-2 rounded">Add Product</button>
+                        </form>
+                        
+                    </div>                                          
+                </div>
+            </div>
+        </section>
+        <section class="product-table-area">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h2 class="text-2xl mb-3">Product List</h2>
+                        <table class="w-full">
+                            <thead>
+                                <tr>
+                                    <th>Product Name</th>
+                                    <th>Product ID</th>
+                                    <th>Small Price</th>
+                                    <th>Large Price</th>
+                                    <!-- More headers as necessary -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for product in products %}
+                                <tr>
+                                    <td>{{ product.name }}</td>
+                                    <td>{{ product.productID }}</td>
+                                    <td>{{ product.smallPrice }}</td>
+                                    <td>{{ product.largePrice }}</td>
+                                    <!-- More fields as necessary -->
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- End banner Area -->	
+
+        
+
+
+        <script src="../js/jquery-2.2.4.min.js"></script>
+        <script src="../js/main.js"></script>	
+    </body>
+</html>
+
+
+

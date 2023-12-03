@@ -1,0 +1,467 @@
+#header {
+  padding: 14px 0;
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  transition: all 0.5s;
+  z-index: 997;
+}
+
+#header.header-scrolled {
+  background: rgba(20, 2, 0, 0.8);
+  transition: all 0.5s;
+}
+
+.header-top ul {
+  text-align: right;
+  margin-right: 5px;
+}
+
+.header-top ul li {
+  color: #fff;
+  display: inline-block;
+  margin-right: 20px;
+}
+
+.header-top ul li a {
+  color: #fff;
+}
+
+@media (max-width: 960px) {
+  .header-top {
+    display: none;
+  }
+}
+
+#logo img {
+  width: 150px;
+  height: auto;
+}
+
+.nav-menu, .nav-menu * {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nav-menu ul {
+  position: absolute;
+  display: none;
+  top: 100%;
+  left: 0;
+  z-index: 99;
+}
+
+.nav-menu li {
+  position: relative;
+  white-space: nowrap;
+}
+
+.nav-menu > li {
+  float: left;
+}
+
+.nav-menu li:hover > ul,
+.nav-menu li.sfHover > ul {
+  display: block;
+}
+
+.nav-menu ul ul {
+  top: 0;
+  left: 100%;
+}
+
+.nav-menu ul li {
+  min-width: 180px;
+  text-align: left;
+}
+
+@media (max-width: 768px) {
+  #nav-menu-container {
+    display: none;
+  }
+}
+
+.nav-menu a {
+  padding: 0 8px 0px 8px;
+  text-decoration: none;
+  display: inline-block;
+  color: #fff;
+  font-weight: 400;
+  font-size: 12px;
+  text-transform: uppercase;
+  outline: none;
+}
+
+.overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.banner-area {
+  background: var(--header-bg-url) center;
+  background-size: cover;
+}
+
+@media (max-width: 1199.98px) {
+  .banner-area .fullscreen {
+    height: 920px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .banner-area {
+    background: var(--header-bg-url);
+    background-position: 50% 90% 50% 50%;
+  }
+}
+
+.banner-content {
+  margin-top: -250px;
+}
+
+.banner-content h1 {
+  color: #fff;
+  font-size: 60px;
+  font-weight: 600;
+  line-height: 1em;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.menu-area {
+  background: url(../img/menu-bg.jpg) center;
+  background-size: cover;
+}
+
+.single-menu {
+  background-color: #fff;
+  box-shadow: 0px 10px 30px 0px rgba(182, 136, 52, 0.2);
+  border-radius: 10px;
+  padding: 30px 30px;
+  margin-bottom: 30px;
+}
+
+.single-menu .title-div {
+  padding-bottom: 20px;
+}
+
+.single-menu .price {
+  color: #b68834;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.banner-area .banner-content form {
+  background: #6d5f5f;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  margin: auto;
+}
+
+.banner-area .banner-content form .form-group input, 
+.banner-area .banner-content form .form-group select {
+  border: 1px solid #050505;
+  border-radius: 4px;
+  padding: 10px;
+  width: 100%;
+  margin-bottom: 20px;
+  height: auto;
+}
+
+.banner-area .banner-content form .form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.banner-area .banner-content form button.btn-primary {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.banner-area .banner-content form button.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.banner-content form label {
+  display: block;
+  margin-bottom: .5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.banner-content form div {
+  margin-bottom: 1rem;
+}
+
+.banner-content form input[type="text"],
+.banner-content form input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.banner-content form button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: block;
+  width: 100%;
+}
+
+.banner-content form button:hover {
+  background-color: #45a049;
+}
+
+@media (max-width: 768px) {
+  .banner-content {
+      margin-top: 20px;
+      padding: 15px;
+  }
+
+  .banner-content form button {
+      padding: 10px;
+  }
+}
+
+.product-table-area {
+  background-color: #ffffff;
+  padding: 2rem 0;
+}
+
+.product-table-area table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+.product-table-area thead {
+  background-color: #333;
+  color: #fff;
+}
+
+.product-table-area th {
+  padding: 0.5rem 1rem;
+  text-align: left;
+  font-weight: bold;
+  letter-spacing: 0.1rem;
+}
+
+.product-table-area tbody td {
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.product-table-area tbody tr:hover {
+  background-color: #f4f4f4;
+}
+
+.product-table-area tbody tr:nth-of-type(odd) {
+  background-color: #f9f9f9;
+  
+}
+
+@media screen and (max-width: 768px) {
+  .product-table-area table {
+      display: block;
+      overflow-x: auto;
+  }
+}
+.banner-content p {
+  color: #fff; /* Set the text color */
+  background-color: #ff6b6b; /* Set the background color */
+  padding: 10px; /* Add some padding around the text */
+  border-radius: 5px; /* Round the corners of the background */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a slight shadow for depth */
+  margin-top: 20px; /* Add some space above the paragraph */
+  font-weight: bold; /* Make the text bold */
+  text-align: center; /* Center the text */
+  max-width: 400px; /* Set a max-width for the paragraph */
+  margin-left: auto; /* Center the paragraph horizontally */
+  margin-right: auto; /* Center the paragraph horizontally */
+}
+.banner-content h2 {
+  color: #f8f9fa; /* Light color for the heading */
+  background-color: #367cb8; /* Dark background for contrast */
+  padding: 10px 15px; /* Padding inside the heading */
+  border-radius: 13px; /* Rounded corners */
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+  margin-bottom: 20px; /* Space below the heading */
+  text-align: center; /* Center the text */
+  font-size: 28px; /* Size of the heading text */
+  font-weight: bold; /* Bold font weight */
+  line-height: 1.2; /* Line height for better readability */
+  margin-top: 20px; /* Space above the heading */
+  width: 60%; /* Adjust the width as needed */
+  margin-left: auto; /* Center the heading horizontally */
+  margin-right: auto; /* Center the heading horizontally */
+}
+
+
+/* Style adjustments for the orders table */
+.banner-content table {
+  width: 100%; /* Full width */
+  border-collapse: collapse; /* Collapse borders */
+  margin-top: 20px; /* Space above the table */
+  background-color: #ffffff; /* White background for readability */
+  color: #333; /* Dark text for contrast */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); /* Add shadow for depth */
+  border-radius: 5px; /* Rounded corners for aesthetic */
+}
+
+.banner-content th,
+.banner-content td {
+  padding: 15px; /* Increase padding for space */
+  text-align: center; /* Center align the text */
+  border-bottom: 1px solid #ddd; /* Border between rows */
+}
+
+.banner-content th {
+  background-color: #4CAF50; /* Green background for headers */
+  color: white; /* White text for headers */
+}
+
+.banner-content tr:nth-child(even) {
+  background-color: #f2f2f2; /* Zebra striping for rows */
+}
+
+.banner-content tr:hover {
+  background-color: #ddd; /* Hover effect for rows */
+}
+
+/* Style adjustments for the confirm button */
+.btn-confirm-orders {
+    display: inline-block; /* Allows block-level behaviors like margin and padding */
+    padding: 10px 20px; /* Uniform padding around the text */
+    font-size: 16px; /* Larger font size */
+    color: white; /* Text color */
+    background-color: #007bff; /* Bootstrap primary blue */
+    border: none; /* No border */
+    border-radius: 4px; /* Rounded corners */
+    text-align: center; /* Center the text inside */
+    text-decoration: none; /* Removes underline from a tags */
+    cursor: pointer; /* Cursor to indicate clickable item */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+    transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
+.btn-confirm-orders:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+}
+
+/* Base modal styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4); /* Dimmed background */
+}
+
+.modal-content {
+  background-color: #fff;
+  margin: 10% auto; /* Adjust as per your layout */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 80%; /* Responsive width */
+  max-width: 500px; /* Maximum width */
+}
+
+/* Close button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Buttons inside modal */
+.modal-content button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+/* Confirm button */
+#confirmBtn {
+  background-color: #4CAF50;
+  color: white;
+  margin-left: 10px;
+
+}
+
+#confirmBtn:hover {
+  background-color: #45a049;
+}
+
+/* Cancel button */
+#cancelBtn {
+  background-color: #f44336;
+  color: white;
+  margin-left: 10px;
+}
+
+#cancelBtn:hover {
+  background-color: #d73829;
+}
+
+/* Responsive typography */
+.modal-content p {
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+  color: #333;
+}
+#thankYouSection {
+  text-align: center;
+  margin-top: 20px;
+}
+
+#orderSummaryTable {
+  margin-top: 20px;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#orderSummaryTable, #orderSummaryTable th, #orderSummaryTable td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#orderSummaryTable th {
+  background-color: #f2f2f2;
+}

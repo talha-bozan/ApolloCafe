@@ -38,11 +38,8 @@ db = firestore.client()
 def index():
     products = db.collection('products').order_by('productID', direction=firestore.Query.ASCENDING).stream()
     product_list = [prod.to_dict() for prod in products]
-    #split list into two
-    product_list1 = product_list[:len(product_list)//2]
-    product_list2 = product_list[len(product_list)//2:]
-
-    return render_template('home.html', products1=product_list1, products2=product_list2)
+    
+    return render_template('index.html', coffees = product_list)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
