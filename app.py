@@ -110,7 +110,11 @@ def give_order():
     
     return render_template('giveorder.html', products=product_list)
 
-
+@app.route('/logout')
+def logout():
+    session.pop('user_id', None)
+    session.pop('user_role', None)
+    return redirect(url_for('index'))
 
 @app.route('/confirm_order')
 def confirm_order():
@@ -200,6 +204,8 @@ def dashboard():
     if 'user_role' in session:
         if session['user_role'] != 'ADMIN':
             return redirect(url_for('userindex'))
+    else:
+        return redirect(url_for('login'))
 
     if request.method == 'POST':
         product_name = request.form['inputName']
@@ -257,27 +263,6 @@ def register():
 
     return render_template('signup.html')
 
-@app.route('/thank_you')
-def thank_you():
-    #fetch user email, uid, username from firebase
-    user = auth.get_user(session['user_id'])
-    user_email = user.email
-    user_name = user.display_name
-    user_id = user.uid
 
-    user_data = {
-        'uid': user_id,
-        'username': user_name,
-        'email': user_email,
-    }
-
-    user_data_firebase = db.collection('users').where(field_path='email', op_string='==', value=user_email).stream()
-    user_data_list = [user_data.to_dict() for user_data in user_data_firebase]
-    return render_template('thank_you.html', user_data=user_data)
-
-
-@app.route('/card')
-def card():
-    return render_template('card.html')
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=5050, debug=True)
