@@ -195,7 +195,7 @@ def register():
         except Exception as e:
             return f"Registration failed: {e}"
 
-    return render_template('register.html')
+    return render_template('signup.html')
 
 @app.route('/thank_you')
 def thank_you():
