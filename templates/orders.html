@@ -3,7 +3,7 @@
     <!-- Mobile Specific Meta -->
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Favicon-->
-    <link rel="shortcut icon" href="../img/fav.png">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/fav.png') }}">
     <!-- Author Meta -->
 
     <!-- meta character set -->
@@ -15,9 +15,14 @@
         <!--
         CSS
         ============================================= -->
-        <link rel="stylesheet" href="../css/font-awesome.min.css">
-        <link rel="stylesheet" href="../css/bootstrap.css">
-        <link rel="stylesheet" href="../css/main.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+        <style>
+            :root {
+                --header-bg-url: url("{{ url_for('static', filename='img/header-bg.jpg') }}");
+            }
+        </style>
     </head>
     <body>
 
@@ -25,13 +30,13 @@
             <div class="container">
                 <div class="row align-items-center justify-content-between d-flex">
                   <div id="logo">
-                    <a href="index.html"><img src="../img/logo.png" alt="" title="" /></a>
+                    <a href="{{ url_for('userindex') }}"><img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" title="" /></a>
                   </div>
                   <nav id="nav-menu-container">
                     <ul class="nav-menu">
-                        <li class="menu-active"><a href="userindex.html">Home</a></li>
-                        <li><a href="giveorder.html">Give Orders</a></li>
-                        <li><a href="orders.html">Orders</a></li>
+                      <li class="menu-active"><a href="{{ url_for('userindex') }}">Home</a></li>
+                      <li><a href="{{url_for('give_order')}}">Give Orders</a></li>
+                      <li><a href="{{url_for('confirm_order')}}">Orders</a></li>
 
                     </ul>
                   </nav><!-- #nav-menu-container -->		    		
@@ -43,8 +48,8 @@
           </header><!-- #header -->
 
 
-        <!-- start banner Area -->
-        <section class="banner-area" id="home">    
+          <section class="banner-area" id="home">    
+    
             <div class="container">
                 <div class="row fullscreen d-flex align-items-center justify-content-start">
                     <div class="banner-content col-lg-7">
@@ -58,25 +63,26 @@
                                             <th>Product ID</th>
                                             <th>Quantity</th>
                                             <th>Delivery Time</th>
+                                            <th>Order Date:</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {% for order in order_list %}
                                             <tr>
-                                                <td>{{ order.productID }}</td>
+                                                <td>{{ order.coffee_type }}</td>
                                                 <td>{{ order.quantity }}</td>
                                                 <td>{{ order.delivery_time }}</td>
+                                                <td>{{ order.date_time }}</td>
                                             </tr>
                                         {% endfor %}
                                     </tbody>
                                 </table>
-    
+        
                                 <button onclick="location.href='/confirm_orders'" class="btn-confirm-orders">Confirm All Orders</button>
-
+        
                                 {% endif %}
                             </div>
                         </div>
-
                     </div>                                          
                 </div>
             </div>
@@ -111,9 +117,8 @@
                   
 
 
-
-        <script src="../js/jquery-2.2.4.min.js"></script>
-        <script src="../js/main.js"></script>	
+        <script src="{{ url_for('static', filename='js/jquery-2.2.4.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/main.js') }}"></script>
         <script>
             // Get the modal
             var modal = document.getElementById("confirmationModal");
@@ -143,23 +148,34 @@
           
             // Handle confirm and cancel actions
             document.getElementById("confirmBtn").onclick = function() {
-                // Hide the modal
-                modal.style.display = "none";
-        
-                // Show the thank you section
-                var thankYouSection = document.getElementById("thankYouSection");
-                thankYouSection.style.display = "block";
-        
-                // Populate the table with order details
-                var orderList = /* Retrieve your order list here */test;
-                var tableBody = document.getElementById("orderSummaryTable").getElementsByTagName('tbody')[0];
-                tableBody.innerHTML = ""; // Clear existing content
-        
-                orderList.forEach(function(order) {
-                    var newRow = tableBody.insertRow();
-                    newRow.innerHTML = "<td>" + order.username + "</td><td>" + order.productID + "</td><td>" + order.quantity + "</td><td>" + order.delivery_time + "</td>";
-                });
-            };
+        var orderList = JSON.parse('{{ order_list | tojson | safe }}');
+
+        // AJAX call to Flask backend
+        $.ajax({
+            type: 'POST',
+            url: '/confirm_orders', // Flask route
+            contentType: 'application/json;charset=UTF-8',
+            data: JSON.stringify({orders: orderList}),
+            success: function(response) {
+                // Clear the table or remove the orders from the list
+                var tableBody = document.querySelector('table tbody');
+                tableBody.innerHTML = ''; // This clears the table
+
+                // Optionally, display a message or redirect
+                console.log("Orders confirmed:", response);
+                alert("Orders have been confirmed."); // Example: Show a confirmation alert
+                // Or redirect to another page
+                // window.location.href = '/some_other_page';
+            },
+            error: function(error) {
+                // Handle errors
+                console.error("Error confirming orders:", error);
+            }
+        });
+
+        modal.style.display = "none";
+    };
+            
           
             document.getElementById("cancelBtn").onclick = function() {
               modal.style.display = "none";

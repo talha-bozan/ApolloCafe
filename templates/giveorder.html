@@ -3,7 +3,7 @@
     <!-- Mobile Specific Meta -->
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Favicon-->
-    <link rel="shortcut icon" href="../img/fav.png">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/fav.png') }}">
     <!-- Author Meta -->
 
     <!-- meta character set -->
@@ -15,9 +15,14 @@
         <!--
         CSS
         ============================================= -->
-        <link rel="stylesheet" href="../css/font-awesome.min.css">
-        <link rel="stylesheet" href="../css/bootstrap.css">
-        <link rel="stylesheet" href="../css/main.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+        <style>
+            :root {
+                --header-bg-url: url("{{ url_for('static', filename='img/header-bg.jpg') }}");
+            }
+        </style>
     </head>
     <body>
 
@@ -25,13 +30,13 @@
             <div class="container">
                 <div class="row align-items-center justify-content-between d-flex">
                   <div id="logo">
-                    <a href="index.html"><img src="../img/logo.png" alt="" title="" /></a>
-                  </div>
+                    <a href="{{ url_for('userindex') }}"><img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" title="" /></a>
+                </div>
                   <nav id="nav-menu-container">
                     <ul class="nav-menu">
-                        <li class="menu-active"><a href="userindex.html">Home</a></li>
-                        <li><a href="giveorder.html">Give Orders</a></li>
-                        <li><a href="orders.html">Orders</a></li>
+                        <li class="menu-active"><a href="{{ url_for('userindex') }}">Home</a></li>
+                        <li><a href="{{url_for('give_order')}}">Give Orders</a></li>
+                        <li><a href="{{url_for('confirm_order')}}">Orders</a></li>
 
                     </ul>
                   </nav><!-- #nav-menu-container -->		    		
@@ -48,11 +53,17 @@
             <div class="container">
                 <div class="row fullscreen d-flex align-items-center justify-content-start">
                     <div class="banner-content col-lg-7">
+
+
+
                         {% if 'user_id' in session %}
                         <br><br><br><br><br><br><br><br><br>
                         <h2 class="text-2xl mb-3">Give Order</h2>
-                            <form action="/give_order" method="post">
-                                <div class="form-group">
+
+
+
+                        <form action="/give_order" method="post">
+                            <div class="form-group">
                                     <label for="coffee_type">Coffee Type:</label>
                                     <select name="coffee_type" id="coffee_type" class="form-control">
                                         {% for product in products %}
@@ -76,6 +87,7 @@
                             </form>
                         {% else %}
                         {% endif %}
+
                     </div>                                          
                 </div>
             </div>
@@ -84,8 +96,8 @@
 
 
 
-        <script src="../js/jquery-2.2.4.min.js"></script>
-        <script src="../js/main.js"></script>	
+        <script src="{{ url_for('static', filename='js/jquery-2.2.4.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     </body>
 </html>
 

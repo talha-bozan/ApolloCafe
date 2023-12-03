@@ -64,10 +64,8 @@ def login():
             user = auth.get_user_by_email(email)
             if user:
                 auth1.sign_in_with_email_and_password(email, password)
-                print("Successfully signed in")
                 session['user_role'] = user_role
                 session['user_id'] = user.uid
-                print(session['user_role'])
                 return redirect(url_for('dashboard'))
         except Exception as e:
             return f"Login failed: {e}"
@@ -92,7 +90,9 @@ def give_order():
             'coffee_type': coffee_type,
             'quantity': quantity,
             'delivery_time': delivery_time,
-            'date_time': date_time
+            'date_time': date_time,
+            'status' : 'pending',
+            'orderID': os.urandom(24).hex()
         }
         
         # Add the order to the Firestore database and get the document reference
@@ -102,46 +102,56 @@ def give_order():
         order_data['orderID'] = order_id
 
         # Get the ID of the newly created document
-        print(order_id)
         
-        return redirect(url_for('confirm_order', order_id=order_id))
+        return redirect(url_for('confirm_order'))
 
     products = db.collection('products').stream()
     product_list = [prod.to_dict() for prod in products]
+    
+    return render_template('giveorder.html', products=product_list)
+
+
+
+@app.route('/confirm_order')
+def confirm_order():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+   
+    user_id = session['user_id']
     current_orders = db.collection('orders').where('userID', '==', user_id).stream()
     orders_list = [order.to_dict() for order in current_orders]
-    return render_template('give_order.html', products=product_list , order_list = orders_list)
 
+    empty_list = []
+    if orders_list:
+        return render_template('orders.html', order_list=orders_list)
+    else:
+        return render_template('orders.html', order_list=empty_list)
 
-# Flask route to confirm all orders
 @app.route('/confirm_orders', methods=['POST'])
 def confirm_orders():
     if 'user_id' not in session:
-        return redirect(url_for('login'))
+        return jsonify({"error": "User not logged in"}), 401
 
-    # Implement your logic for confirming orders here
-    # Example: Moving current orders to a 'confirmed_orders' collection
-    # ...
+    user_id = session['user_id']
+    current_orders = db.collection('orders').where('userID', '==', user_id).stream()
+    
+    for order_snapshot in current_orders:
+        order = order_snapshot.to_dict()
+        order['status'] = 'confirmed'
+        
+        # Add the order to 'current_orders' collection
+        db.collection('current_orders').add(order)
 
-    return redirect(url_for('card'))  # Redirecting to the 'card' route after confirming orders
+        # Delete the order from the original 'orders' collection
+        order_snapshot.reference.delete()
 
-@app.route('/confirm_order/<order_id>')
-def confirm_order(order_id):
-    if 'user_id' not in session:
-        return redirect(url_for('login'))
+    return jsonify({"message": "Orders confirmed"}), 200
 
-    order = db.collection('orders').document(order_id).get()
-    session['order_id'] = order_id
-    if order.exists:
-        return render_template('confirm_order.html', order=order.to_dict(), orderID = order_id)
-    else:
-        return "Order not found", 404
+
 
 @app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
-    print("Method:", request.method)
-    print("Form Data:", request.form)
-    print(session['user_role'],"asdfhasdhgsa")
+
     if 'user_role' in session:
         if session['user_role'] != 'ADMIN':
             return redirect(url_for('userindex'))
