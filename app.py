@@ -232,6 +232,7 @@ def dashboard():
 def register():
     if request.method == 'POST':
         username = request.form['username']
+        fullname = request.form['fullname']
         email = request.form['email']
         password = request.form['password']
         confirm_password = request.form['confirm_password']
@@ -252,7 +253,8 @@ def register():
                 'username': username,
                 'email': email,
                 'password': password,
-                'role': role  
+                'role': role,
+                'fullname': fullname
             }
             
             db.collection('users').add(user_data)
