@@ -34,6 +34,15 @@ app = Flask(__name__)
 app.secret_key = os.urandom(24)
 db = firestore.client()
 
+@app.route('/userindex')
+def userindex():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    products = db.collection('products').order_by('productID', direction=firestore.Query.ASCENDING).stream()
+    product_list = [prod.to_dict() for prod in products]
+    return render_template('userindex.html', coffees = product_list)
+
 @app.route('/')
 def index():
     products = db.collection('products').order_by('productID', direction=firestore.Query.ASCENDING).stream()
@@ -132,10 +141,10 @@ def confirm_order(order_id):
 def dashboard():
     print("Method:", request.method)
     print("Form Data:", request.form)
-
+    print(session['user_role'],"asdfhasdhgsa")
     if 'user_role' in session:
         if session['user_role'] != 'ADMIN':
-            return redirect(url_for('index'))
+            return redirect(url_for('userindex'))
     else:
         return redirect(url_for('login'))
 
