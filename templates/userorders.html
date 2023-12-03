@@ -3,7 +3,7 @@
     <!-- Mobile Specific Meta -->
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Favicon-->
-    <link rel="shortcut icon" href="../img/fav.png">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/fav.png') }}">
     <!-- Author Meta -->
 
     <!-- meta character set -->
@@ -12,27 +12,32 @@
     <title> Apollo Coffee</title>
 
     <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,400,300,500,600,700" rel="stylesheet"> 
-        <!--
-        CSS
-        ============================================= -->
-        <link rel="stylesheet" href="../css/font-awesome.min.css">
-        <link rel="stylesheet" href="../css/bootstrap.css">
-        <link rel="stylesheet" href="../css/main.css">
-    </head>
+    <!--
+    CSS
+    ============================================= -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <style>
+        :root {
+            --header-bg-url: url("{{ url_for('static', filename='img/header-bg.jpg') }}");
+        }
+    </style>
+</head>
     <body>
 
           <header id="header" id="home">		  	
             <div class="container">
                 <div class="row align-items-center justify-content-between d-flex">
-                  <div id="logo">
-                    <a href="index.html"><img src="../img/logo.png" alt="" title="" /></a>
-                  </div>
-                  <nav id="nav-menu-container">
-                    <ul class="nav-menu">
-                        <li class="menu-active"><a href="adminindex.html">Home</a></li>
-                        <li><a href="addproduct.html">Add Product</a></li>
-                        <li><a href="userorders.html">User Orders</a></li>
-                    </ul>
+                    <div id="logo">
+                        <a href="{{ url_for('adminindex') }}"><img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" title="" /></a>
+                    </div>
+                      <nav id="nav-menu-container">
+                        <ul class="nav-menu">
+                            <li class="menu-active"><a href="{{ url_for('adminindex') }}">Home</a></li>
+                            <li><a href="{{ url_for('dashboard') }}">Add Product</a></li>
+                            <li><a href="{{ url_for('user_orders') }}">User Orders</a></li>
+                        </ul>
                   </nav><!-- #nav-menu-container -->		    		
                 </div>
             </div>
@@ -54,17 +59,17 @@
                                 <table>
                                     <thead>
                                         <tr>
-                                            <th>Username</th>
+                                            <th>User Name</th>
                                             <th>Product ID</th>
                                             <th>Quantity</th>
                                             <th>Delivery Time</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                      {% for order in order_list %}
+                                      {% for order in currentOrderList %}
                                           <tr>
-                                              <td>{{ order.username }}</td>
-                                              <td>{{ order.productID }}</td>
+                                              <td>{{ order.user_full_name }}</td>
+                                              <td>{{ order.coffee_type }}</td>
                                               <td>{{ order.quantity }}</td>
                                               <td>{{ order.delivery_time }}</td>
                                           </tr>
@@ -86,9 +91,8 @@
 
 
 
-        <script src="../js/jquery-2.2.4.min.js"></script>
-        <script src="../js/main.js"></script>	
-          
+        <script src="{{ url_for('static', filename='js/jquery-2.2.4.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     </body>
 </html>
 

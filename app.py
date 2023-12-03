@@ -152,11 +152,47 @@ def adminindex():
     if 'user_id' not in session:
         return redirect(url_for('login'))
     if session['user_role'] != 'ADMIN':
-        return redirect(url_for('login'))
+        return redirect(url_for('userindex'))
     products = db.collection('products').order_by('productID', direction=firestore.Query.ASCENDING).stream()
     product_list = [prod.to_dict() for prod in products]
 
     return render_template('adminindex.html', coffees = product_list)
+
+@app.route('/user_orders', methods=['GET', 'POST'])
+def user_orders():
+    if 'user_role' in session:
+        if session['user_role'] != 'ADMIN':
+            return redirect(url_for('userindex'))
+    else:
+        return redirect(url_for('login'))
+    
+    # Fetch the last ten orders
+    last_ten_orders = db.collection('orders').order_by('date_time', direction=firestore.Query.DESCENDING).limit(10).stream()
+    
+    # Prepare a list to hold orders with user full names
+    current_orders_with_names = []
+
+    for order_snapshot in last_ten_orders:
+        order = order_snapshot.to_dict()
+        
+        # Fetch user data for each order
+        user_id = order['userID']
+        user_snapshot = db.collection('users').where('uid', '==', user_id).limit(1).stream()
+        user_data = next(user_snapshot, None)
+
+        # Check if user data is found
+        if user_data:
+            user_full_name = user_data.to_dict().get('fullname', 'No name')
+            order['user_full_name'] = user_full_name
+
+        current_orders_with_names.append(order)
+
+    print(current_orders_with_names)
+    # Sort the list by date_time
+    current_orders_with_names.sort(key=lambda x: time.mktime(time.strptime(x['date_time'], "%d/%m/%Y %H:%M:%S")), reverse=True)
+
+    return render_template('userorders.html', currentOrderList=current_orders_with_names)
+
 
 @app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
@@ -164,8 +200,6 @@ def dashboard():
     if 'user_role' in session:
         if session['user_role'] != 'ADMIN':
             return redirect(url_for('userindex'))
-    else:
-        return redirect(url_for('adminindex'))
 
     if request.method == 'POST':
         product_name = request.form['inputName']
@@ -181,14 +215,12 @@ def dashboard():
         db.collection('products').add(product_data)
         return redirect(url_for('dashboard')) 
     #change below to sort by date and time
-    last_ten_orders = db.collection('orders').order_by('date_time', direction=firestore.Query.DESCENDING).stream()
-    current_orders_list = [order.to_dict() for order in last_ten_orders]
-    #sort the current list by date_time
-    current_orders_list.sort(key=lambda x: time.mktime(time.strptime(x['date_time'], "%d/%m/%Y %H:%M:%S")), reverse=True)
-
-    products = db.collection('products').order_by('productID', direction=firestore.Query.ASCENDING).stream()
+ 
+    products = db.collection('products').stream()
     product_list = [prod.to_dict() for prod in products]
-    return render_template('dashboard.html', products=product_list, currentOrderList = current_orders_list )
+    product_list.sort(key=lambda x: int(x['productID']))
+
+    return render_template('addproduct.html', products=product_list )
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
