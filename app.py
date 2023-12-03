@@ -66,7 +66,7 @@ def login():
                 auth1.sign_in_with_email_and_password(email, password)
                 session['user_role'] = user_role
                 session['user_id'] = user.uid
-                return redirect(url_for('dashboard'))
+                return redirect(url_for('adminindex'))
         except Exception as e:
             return f"Login failed: {e}"
     return render_template('login.html')
@@ -147,7 +147,16 @@ def confirm_orders():
 
     return jsonify({"message": "Orders confirmed"}), 200
 
+@app.route('/adminindex', methods=['GET', 'POST'])
+def adminindex():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    if session['user_role'] != 'ADMIN':
+        return redirect(url_for('login'))
+    products = db.collection('products').order_by('productID', direction=firestore.Query.ASCENDING).stream()
+    product_list = [prod.to_dict() for prod in products]
 
+    return render_template('adminindex.html', coffees = product_list)
 
 @app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
@@ -156,7 +165,7 @@ def dashboard():
         if session['user_role'] != 'ADMIN':
             return redirect(url_for('userindex'))
     else:
-        return redirect(url_for('login'))
+        return redirect(url_for('adminindex'))
 
     if request.method == 'POST':
         product_name = request.form['inputName']
