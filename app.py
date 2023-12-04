@@ -11,7 +11,7 @@ import time
 
 
 # Initialize Firebase Admin SDK
-cred = credentials.Certificate("KEYS\\user-api.json")
+cred = credentials.Certificate("/home/talhabozan/ApolloCafe/KEYS/user-api.json")
 firebase_admin.initialize_app(cred)
 
 firebase_config = {
