@@ -246,7 +246,11 @@ def register():
             
             db.collection('users').add(user_data)
 
-            return "Registration successful"  
+            if role == 'ADMIN':
+                return redirect(url_for('adminindex'))
+            else:
+                return redirect(url_for('userindex'))
+            
         except Exception as e:
             return f"Registration failed: {e}"
 
