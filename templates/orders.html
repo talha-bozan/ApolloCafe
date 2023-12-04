@@ -1,20 +1,12 @@
 <!DOCTYPE html>
 <head>
-    <!-- Mobile Specific Meta -->
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Favicon-->
     <link rel="shortcut icon" href="{{ url_for('static', filename='img/fav.png') }}">
-    <!-- Author Meta -->
 
-    <!-- meta character set -->
     <meta charset="UTF-8">
-    <!-- Site Title -->
     <title> Apollo Coffee</title>
 
-    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,400,300,500,600,700" rel="stylesheet"> 
-        <!--
-        CSS
-        ============================================= -->
+      <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,400,300,500,600,700" rel="stylesheet"> 
         <link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
@@ -25,7 +17,6 @@
         </style>
     </head>
     <body>
-
           <header id="header" id="home">		  	
             <div class="container">
                 <div class="row align-items-center justify-content-between d-flex">
@@ -39,13 +30,13 @@
                       <li><a href="{{url_for('confirm_order')}}">Orders</a></li>
                       <li><a href="{{ url_for('logout') }}">Logout</a></li>
                     </ul>
-                  </nav><!-- #nav-menu-container -->		    		
+                  </nav>	    		
                 </div>
             </div>
-          </header><!-- #header --> 		
+          </header>	
                 </div>
             </div>
-          </header><!-- #header -->
+          </header>
 
 
           <section class="banner-area" id="home">    
@@ -87,7 +78,6 @@
                 </div>
             </div>
         </section>
-        <!-- Confirmation Modal -->
         <div id="confirmationModal" class="modal">
             <div class="modal-content">
               <span class="close">&times;</span>
@@ -96,7 +86,6 @@
               <button id="cancelBtn">Cancel</button>
             </div>
           </div>
-        <!-- Thank You Section -->
         <div id="thankYouSection" style="display: none;">
             <h3>Thank you for your order, we are preparing your orders.</h3>
             <table id="orderSummaryTable" class="table">
@@ -109,7 +98,6 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Order details will be dynamically inserted here -->
                 </tbody>
             </table>
         </div>
@@ -120,63 +108,49 @@
         <script src="{{ url_for('static', filename='js/jquery-2.2.4.min.js') }}"></script>
         <script src="{{ url_for('static', filename='js/main.js') }}"></script>
         <script>
-            // Get the modal
             var modal = document.getElementById("confirmationModal");
           
-            // Get the button that opens the modal
             var btn = document.querySelector(".btn-confirm-orders");
           
-            // Get the <span> element that closes the modal
             var span = document.getElementsByClassName("close")[0];
           
-            // When the user clicks the button, open the modal 
             btn.onclick = function() {
               modal.style.display = "block";
             }
           
-            // When the user clicks on <span> (x), close the modal
             span.onclick = function() {
               modal.style.display = "none";
             }
           
-            // When the user clicks anywhere outside of the modal, close it
             window.onclick = function(event) {
               if (event.target == modal) {
                 modal.style.display = "none";
               }
             }
           
-            // Handle confirm and cancel actions
             document.getElementById("confirmBtn").onclick = function() {
         var orderList = JSON.parse('{{ order_list | tojson | safe }}');
 
-        // AJAX call to Flask backend
         $.ajax({
             type: 'POST',
-            url: '/confirm_orders', // Flask route
+            url: '/confirm_orders', 
             contentType: 'application/json;charset=UTF-8',
             data: JSON.stringify({orders: orderList}),
             success: function(response) {
-                // Clear the table or remove the orders from the list
                 var tableBody = document.querySelector('table tbody');
-                tableBody.innerHTML = ''; // This clears the table
+                tableBody.innerHTML = ''; 
 
-                // Optionally, display a message or redirect
                 console.log("Orders confirmed:", response);
-                alert("Orders have been confirmed."); // Example: Show a confirmation alert
-                // Or redirect to another page
-                // window.location.href = '/some_other_page';
+                alert("Orders have been confirmed."); 
             },
             error: function(error) {
-                // Handle errors
                 console.error("Error confirming orders:", error);
             }
         });
 
         modal.style.display = "none";
     };
-            
-          
+                 
             document.getElementById("cancelBtn").onclick = function() {
               modal.style.display = "none";
             };

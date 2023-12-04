@@ -1,20 +1,13 @@
 <!DOCTYPE html>
 <head>
-    <!-- Mobile Specific Meta -->
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Favicon-->
     <link rel="shortcut icon" href="img/fav.png">
-    <!-- Author Meta -->
 
-    <!-- meta character set -->
     <meta charset="UTF-8">
-    <!-- Site Title -->
     <title> Apollo Coffee</title>
 
     <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,400,300,500,600,700" rel="stylesheet"> 
-        <!--
-        CSS
-        ============================================= -->
+
         <link rel="stylesheet" href="css/font-awesome.min.css">
         <link rel="stylesheet" href="css/bootstrap.css">
         <link rel="stylesheet" href="css/main.css">
@@ -29,15 +22,10 @@
                   </div>
 <!DOCTYPE html>
 <head>
-    <!-- Mobile Specific Meta -->
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Favicon-->
     <link rel="shortcut icon" href="{{ url_for('static', filename='img/fav.png') }}">
-    <!-- Author Meta -->
 
-    <!-- meta character set -->
     <meta charset="UTF-8">
-    <!-- Site Title -->
     <title> Apollo Coffee</title>
 
     <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,400,300,500,600,700" rel="stylesheet">
@@ -63,29 +51,24 @@
                         <li class="menu-active"><a href="{{ url_for('index') }}">Home</a></li>
                         <li><a href="{{ url_for('login') }}">Login</a></li>
                         <li><a href="{{ url_for('register') }}">Sign Up</a></li>
-
-
                     </ul>
-                  </nav><!-- #nav-menu-container -->		    		
+                  </nav>	    		
                 </div>
             </div>
-          </header><!-- #header --> 		
+          </header>		
                 </div>
             </div>
-          </header><!-- #header -->
+          </header>
 
 
-        <!-- start banner Area -->
         <section class="banner-area" id="home">    
             <div class="container">
                 <div class="row fullscreen d-flex align-items-center justify-content-start">
                     <div class="banner-content col-lg-7">
-                        <!-- Registration Form Starts Here -->
                         <br><br><br><br><br><br><br><br><br>
                         <h2 class="text-2xl mb-3">Sign Up</h2>
 
                         <form action="{{url_for('register')}}" method="post">
-                            <!-- Form Fields -->
                             <div class="form-group">
 
                                 <label for="username" class="text-white block mb-2">Username:</label>
@@ -115,15 +98,12 @@
                                     <option value="ADMIN">Admin</option>
                                 </select>
                             </div>
-                            <!-- Submit Button -->
                             <button type="submit" class="btn btn-primary">Register</button>
                         </form>
-                        <!-- Registration Form Ends Here -->
                     </div>                                          
                 </div>
             </div>
         </section>
-        <!-- End banner Area -->	
 
 
 

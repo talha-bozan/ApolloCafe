@@ -9,9 +9,8 @@ import datetime
 import time
 
 
-
-# Initialize Firebase Admin SDK
 cred = credentials.Certificate("/home/talhabozan/ApolloCafe/KEYS/user-api.json")
+
 firebase_admin.initialize_app(cred)
 
 firebase_config = {
@@ -80,8 +79,7 @@ def give_order():
     if request.method == 'POST':
         coffee_type = request.form['coffee_type']
         quantity = request.form['quantity']
-        delivery_time = request.form['delivery_time']  # Example: "now", "in 35 minutes", etc.
-        #add date and time
+        delivery_time = request.form['delivery_time']
         now = datetime.datetime.now()
         date_time = now.strftime("%d/%m/%Y %H:%M:%S")
 
@@ -95,13 +93,11 @@ def give_order():
             'orderID': os.urandom(24).hex()
         }
         
-        # Add the order to the Firestore database and get the document reference
         doc_ref = db.collection('orders').add(order_data)
         order_id = doc_ref[1].id
 
         order_data['orderID'] = order_id
 
-        # Get the ID of the newly created document
         
         return redirect(url_for('confirm_order'))
 
@@ -143,10 +139,8 @@ def confirm_orders():
         order = order_snapshot.to_dict()
         order['status'] = 'confirmed'
         
-        # Add the order to 'current_orders' collection
         db.collection('current_orders').add(order)
 
-        # Delete the order from the original 'orders' collection
         order_snapshot.reference.delete()
 
     return jsonify({"message": "Orders confirmed"}), 200
@@ -170,21 +164,17 @@ def user_orders():
     else:
         return redirect(url_for('login'))
     
-    # Fetch the last ten orders
-    last_ten_orders = db.collection('orders').order_by('date_time', direction=firestore.Query.DESCENDING).limit(10).stream()
+    last_ten_orders = db.collection('current_orders').order_by('date_time', direction=firestore.Query.DESCENDING).limit(10).stream()
     
-    # Prepare a list to hold orders with user full names
     current_orders_with_names = []
 
     for order_snapshot in last_ten_orders:
         order = order_snapshot.to_dict()
         
-        # Fetch user data for each order
         user_id = order['userID']
         user_snapshot = db.collection('users').where('uid', '==', user_id).limit(1).stream()
         user_data = next(user_snapshot, None)
 
-        # Check if user data is found
         if user_data:
             user_full_name = user_data.to_dict().get('fullname', 'No name')
             order['user_full_name'] = user_full_name
@@ -192,7 +182,6 @@ def user_orders():
         current_orders_with_names.append(order)
 
     print(current_orders_with_names)
-    # Sort the list by date_time
     current_orders_with_names.sort(key=lambda x: time.mktime(time.strptime(x['date_time'], "%d/%m/%Y %H:%M:%S")), reverse=True)
 
     return render_template('userorders.html', currentOrderList=current_orders_with_names)
@@ -220,7 +209,6 @@ def dashboard():
         }
         db.collection('products').add(product_data)
         return redirect(url_for('dashboard')) 
-    #change below to sort by date and time
  
     products = db.collection('products').stream()
     product_list = [prod.to_dict() for prod in products]
@@ -236,12 +224,11 @@ def register():
         email = request.form['email']
         password = request.form['password']
         confirm_password = request.form['confirm_password']
-        role = request.form['role']  # Get the selected role from the form
+        role = request.form['role'] 
 
         if password != confirm_password:
             return "Password and Confirm Password do not match"
         try:
-            # Create user in Firebase Authentication
             user = auth.create_user(
                 email=email,
                 email_verified=False,
@@ -259,7 +246,7 @@ def register():
             
             db.collection('users').add(user_data)
 
-            return "Registration successful"  # You can redirect to another page if registration is successful
+            return "Registration successful"  
         except Exception as e:
             return f"Registration failed: {e}"
 

@@ -1,20 +1,13 @@
 <!DOCTYPE html>
 <head>
-    <!-- Mobile Specific Meta -->
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Favicon-->
     <link rel="shortcut icon" href="{{ url_for('static', filename='img/fav.png') }}">
-    <!-- Author Meta -->
 
-    <!-- meta character set -->
     <meta charset="UTF-8">
-    <!-- Site Title -->
     <title> Apollo Coffee</title>
 
     <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,400,300,500,600,700" rel="stylesheet"> 
-        <!--
-        CSS
-        ============================================= -->
+
         <link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
@@ -39,16 +32,15 @@
                         <li><a href="{{url_for('confirm_order')}}">Orders</a></li>
                       <li><a href="{{ url_for('logout') }}">Logout</a></li>
                     </ul>
-                  </nav><!-- #nav-menu-container -->		    		
+                  </nav>	    		
                 </div>
             </div>
-          </header><!-- #header --> 		
+          </header>	
                 </div>
             </div>
-          </header><!-- #header -->
+          </header>
 
 
-        <!-- start banner Area -->
         <section class="banner-area" id="home">    
             <div class="container">
                 <div class="row fullscreen d-flex align-items-center justify-content-start">
@@ -92,10 +84,6 @@
                 </div>
             </div>
         </section>
-
-
-
-
         <script src="{{ url_for('static', filename='js/jquery-2.2.4.min.js') }}"></script>
         <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     </body>
