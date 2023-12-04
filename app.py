@@ -9,19 +9,19 @@ import datetime
 import time
 
 
-cred = credentials.Certificate("/home/talhabozan/ApolloCafe/KEYS/user-api.json")
+cred = credentials.Certificate("user-api.json")
 
 firebase_admin.initialize_app(cred)
 
 firebase_config = {
-  "apiKey": "AIzaSyAhs8VGY6wvs_kG5ujPdNkZAC7DAoTmPN4",
-  "authDomain": "web-test-aa01a.firebaseapp.com",
-  "databaseURL": "https://web-test-aa01a-default-rtdb.firebaseio.com",
-  "projectId": "web-test-aa01a",
-  "storageBucket": "web-test-aa01a.appspot.com",
-  "messagingSenderId": "319219619955",
-  "appId": "1:319219619955:web:0a44e3866f9c3c5ee93206",
-  "measurementId": "G-WCJEGP2Z1G"
+    "apiKey": "AIzaSyAhs8VGY6wvs_kG5ujPdNkZAC7DAoTmPN4",
+    "authDomain": "web-test-aa01a.firebaseapp.com",
+    "databaseURL": "https://web-test-aa01a-default-rtdb.firebaseio.com",
+    "projectId": "web-test-aa01a",
+    "storageBucket": "web-test-aa01a.appspot.com",
+    "messagingSenderId": "319219619955",
+    "appId": "1:319219619955:web:0a44e3866f9c3c5ee93206",
+    "measurementId": "G-WCJEGP2Z1G"
 }
 
 
@@ -33,33 +33,40 @@ app = Flask(__name__)
 app.secret_key = os.urandom(24)
 db = firestore.client()
 
+
 @app.route('/userindex')
 def userindex():
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
-    products = db.collection('products').order_by('productID', direction=firestore.Query.ASCENDING).stream()
+    products = db.collection('products').order_by(
+        'productID', direction=firestore.Query.ASCENDING).stream()
     product_list = [prod.to_dict() for prod in products]
-    return render_template('userindex.html', coffees = product_list)
+    return render_template('userindex.html', coffees=product_list)
+
 
 @app.route('/')
 def index():
-    products = db.collection('products').order_by('productID', direction=firestore.Query.ASCENDING).stream()
+    products = db.collection('products').order_by(
+        'productID', direction=firestore.Query.ASCENDING).stream()
     product_list = [prod.to_dict() for prod in products]
-    
-    return render_template('index.html', coffees = product_list)
+
+    return render_template('index.html', coffees=product_list)
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
-        user_data_firebase = db.collection('users').where(field_path='email', op_string='==', value=email).stream()
-        user_data_list = [user_data.to_dict() for user_data in user_data_firebase]
+        user_data_firebase = db.collection('users').where(
+            field_path='email', op_string='==', value=email).stream()
+        user_data_list = [user_data.to_dict()
+                          for user_data in user_data_firebase]
         if not user_data_list:
             return "User not found"
         user_role = user_data_list[0]['role']
-        try:            
+        try:
             user = auth.get_user_by_email(email)
             if user:
                 auth1.sign_in_with_email_and_password(email, password)
@@ -69,6 +76,7 @@ def login():
         except Exception as e:
             return f"Login failed: {e}"
     return render_template('login.html')
+
 
 @app.route('/give_order', methods=['GET', 'POST'])
 def give_order():
@@ -89,22 +97,22 @@ def give_order():
             'quantity': quantity,
             'delivery_time': delivery_time,
             'date_time': date_time,
-            'status' : 'pending',
+            'status': 'pending',
             'orderID': os.urandom(24).hex()
         }
-        
+
         doc_ref = db.collection('orders').add(order_data)
         order_id = doc_ref[1].id
 
         order_data['orderID'] = order_id
 
-        
         return redirect(url_for('confirm_order'))
 
     products = db.collection('products').stream()
     product_list = [prod.to_dict() for prod in products]
-    
+
     return render_template('giveorder.html', products=product_list)
+
 
 @app.route('/logout')
 def logout():
@@ -112,13 +120,15 @@ def logout():
     session.pop('user_role', None)
     return redirect(url_for('index'))
 
+
 @app.route('/confirm_order')
 def confirm_order():
     if 'user_id' not in session:
         return redirect(url_for('login'))
-   
+
     user_id = session['user_id']
-    current_orders = db.collection('orders').where('userID', '==', user_id).stream()
+    current_orders = db.collection('orders').where(
+        'userID', '==', user_id).stream()
     orders_list = [order.to_dict() for order in current_orders]
 
     empty_list = []
@@ -127,23 +137,26 @@ def confirm_order():
     else:
         return render_template('orders.html', order_list=empty_list)
 
+
 @app.route('/confirm_orders', methods=['POST'])
 def confirm_orders():
     if 'user_id' not in session:
         return jsonify({"error": "User not logged in"}), 401
 
     user_id = session['user_id']
-    current_orders = db.collection('orders').where('userID', '==', user_id).stream()
-    
+    current_orders = db.collection('orders').where(
+        'userID', '==', user_id).stream()
+
     for order_snapshot in current_orders:
         order = order_snapshot.to_dict()
         order['status'] = 'confirmed'
-        
+
         db.collection('current_orders').add(order)
 
         order_snapshot.reference.delete()
 
     return jsonify({"message": "Orders confirmed"}), 200
+
 
 @app.route('/adminindex', methods=['GET', 'POST'])
 def adminindex():
@@ -151,10 +164,12 @@ def adminindex():
         return redirect(url_for('login'))
     if session['user_role'] != 'ADMIN':
         return redirect(url_for('userindex'))
-    products = db.collection('products').order_by('productID', direction=firestore.Query.ASCENDING).stream()
+    products = db.collection('products').order_by(
+        'productID', direction=firestore.Query.ASCENDING).stream()
     product_list = [prod.to_dict() for prod in products]
 
-    return render_template('adminindex.html', coffees = product_list)
+    return render_template('adminindex.html', coffees=product_list)
+
 
 @app.route('/user_orders', methods=['GET', 'POST'])
 def user_orders():
@@ -163,16 +178,18 @@ def user_orders():
             return redirect(url_for('userindex'))
     else:
         return redirect(url_for('login'))
-    
-    last_ten_orders = db.collection('current_orders').order_by('date_time', direction=firestore.Query.DESCENDING).limit(10).stream()
-    
+
+    last_ten_orders = db.collection('current_orders').order_by(
+        'date_time', direction=firestore.Query.DESCENDING).limit(10).stream()
+
     current_orders_with_names = []
 
     for order_snapshot in last_ten_orders:
         order = order_snapshot.to_dict()
-        
+
         user_id = order['userID']
-        user_snapshot = db.collection('users').where('uid', '==', user_id).limit(1).stream()
+        user_snapshot = db.collection('users').where(
+            'uid', '==', user_id).limit(1).stream()
         user_data = next(user_snapshot, None)
 
         if user_data:
@@ -182,7 +199,8 @@ def user_orders():
         current_orders_with_names.append(order)
 
     print(current_orders_with_names)
-    current_orders_with_names.sort(key=lambda x: time.mktime(time.strptime(x['date_time'], "%d/%m/%Y %H:%M:%S")), reverse=True)
+    current_orders_with_names.sort(key=lambda x: time.mktime(
+        time.strptime(x['date_time'], "%d/%m/%Y %H:%M:%S")), reverse=True)
 
     return render_template('userorders.html', currentOrderList=current_orders_with_names)
 
@@ -208,13 +226,14 @@ def dashboard():
             'largePrice': large_price
         }
         db.collection('products').add(product_data)
-        return redirect(url_for('dashboard')) 
- 
+        return redirect(url_for('dashboard'))
+
     products = db.collection('products').stream()
     product_list = [prod.to_dict() for prod in products]
     product_list.sort(key=lambda x: int(x['productID']))
 
-    return render_template('addproduct.html', products=product_list )
+    return render_template('addproduct.html', products=product_list)
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -224,7 +243,7 @@ def register():
         email = request.form['email']
         password = request.form['password']
         confirm_password = request.form['confirm_password']
-        role = request.form['role'] 
+        role = request.form['role']
 
         if password != confirm_password:
             return "Password and Confirm Password do not match"
@@ -243,14 +262,14 @@ def register():
                 'role': role,
                 'fullname': fullname
             }
-            
+
             db.collection('users').add(user_data)
 
             if role == 'ADMIN':
                 return redirect(url_for('adminindex'))
             else:
                 return redirect(url_for('userindex'))
-            
+
         except Exception as e:
             return f"Registration failed: {e}"
 
